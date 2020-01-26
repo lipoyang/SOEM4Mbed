@@ -12,6 +12,8 @@
 #include "mbed.h"
 #include <SOEM.h>
 
+Serial pc(USBTX, USBRX);
+
 char IOmap[4096];
 ec_ODlistt ODlist;
 ec_OElistt OElist;
@@ -620,15 +622,14 @@ void slaveinfo(char *ifname)
    }
 }
 
-Serial pc(USBTX, USBRX);
-
 int main()
 {
+    pc.baud(115200);
     pc.printf("slaveinfo\n");
 
     while(1)
     {
-        char NIF_NAME[] = "T4"; // It's dummy
+        char NIF_NAME[] = "dummy"; // dummy parameter
 
         if(pc.readable()){
             char c = pc.getc();

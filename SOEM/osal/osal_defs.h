@@ -25,7 +25,7 @@ void debug_print(const char* format, ...);
 #endif
 
 //#ifndef PACKED
-#undef PACKED
+#undef PACKED // TODO
 #define PACKED_BEGIN
 #define PACKED  __attribute__((__packed__))
 #define PACKED_END

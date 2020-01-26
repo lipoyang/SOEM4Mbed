@@ -52,12 +52,12 @@ void osal_free(void *ptr)
 
 int osal_thread_create(void *thandle, int stacksize, void *func, void *param)
 {
-    // not support multi-task
+    // TODO not supported
     return 1;
 }
 
 int osal_thread_create_rt(void *thandle, int stacksize, void *func, void *param)
 {
-    // not support multi-task
+    // TODO not supported
     return 1;
 }
