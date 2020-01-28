@@ -2,7 +2,7 @@
 
 #define FRAME_LENGTH_MAX 1536
 
-static Ethernet s_ethernet;
+static Ethernet *pEthernet;
 static unsigned char ethernetFrameBuffer[FRAME_LENGTH_MAX];
 
 #ifdef __cplusplus
@@ -11,35 +11,51 @@ extern "C"
 #endif
 
 // (1) open
-// return: 0=SUCCESS
+// return: 0=SUCCESS / 1=FAILED
 int hal_ethernet_open(void)
 {
-	s_ethernet.set_link(Ethernet::FullDuplex100);
+	//printf("hal_ethernet_open...\n");
+    pEthernet = new Ethernet();
+	pEthernet->set_link(Ethernet::FullDuplex100);
 
-	// TODO timeout
-	do{
+	// wait for link up (timeout 2sec)
+	for(int i=0;i<200;i++){
 		wait_ms(10);
-	}while(s_ethernet.link() == 0);
-
-    return 0;
+		if(pEthernet->link() == 1){
+			//printf("hal_ethernet_open ok\n");
+			return 0;
+		}
+	}
+	//printf("hal_ethernet_open failed\n");
+    return 1;
 }
 
 // (2) close
 void hal_ethernet_close(void)
 {
-	// do nothing
+	delete pEthernet;
 }
 
 // (3) send
 // return: 0=SUCCESS (!!! not sent size)
 int hal_ethernet_send(unsigned char *data, int len)
 {
-	int ret = s_ethernet.write((const char *)data, len);
+	// link check
+    if (pEthernet->link() == 0){
+        hal_ethernet_close();
+        if(hal_ethernet_open() == 1){
+            return -3;
+        }
+    }
+    
+	int ret = pEthernet->write((const char *)data, len);
 	if(ret != len){
+		//printf("hal_ethernet_send error 1\n");
 		return -1;
 	}
-	ret = s_ethernet.send();
+	ret = pEthernet->send();
 	if(ret == 0){
+		//printf("hal_ethernet_send error 2\n");
 		return -2;
 	}
 	return 0;
@@ -49,14 +65,16 @@ int hal_ethernet_send(unsigned char *data, int len)
 // return: received size
 int hal_ethernet_recv(unsigned char **data)
 {
-    int size = s_ethernet.receive();
+    int size = pEthernet->receive();
     if(size == 0){
     	return 0;
     }else if(size > FRAME_LENGTH_MAX){
+		//printf("hal_ethernet_recv error 1\n");
     	return -1;
     }
-    int size2 = s_ethernet.read((char*)ethernetFrameBuffer, size);
+    int size2 = pEthernet->read((char*)ethernetFrameBuffer, size);
     if(size2 != size){
+		//printf("hal_ethernet_recv error 2\n");
     	return -2;
     }
     *data = ethernetFrameBuffer;
