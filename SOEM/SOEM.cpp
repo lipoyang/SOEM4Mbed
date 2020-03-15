@@ -19,7 +19,7 @@ int hal_ethernet_open(void)
 	pEthernet->set_link(Ethernet::FullDuplex100);
 
 	// wait for link up (timeout 2sec)
-	for(int i=0;i<200;i++){
+	for(int i=0;i<500;i++){
 		wait_ms(10);
 		if(pEthernet->link() == 1){
 			//printf("hal_ethernet_open ok\n");
