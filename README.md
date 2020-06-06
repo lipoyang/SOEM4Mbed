@@ -11,6 +11,7 @@ The original SOEM is at https://github.com/OpenEtherCATsociety/SOEM
 * GR-PEACH (Renesas RZ/A1H, ARM Cortex-A9)
 * GR-MANGO (Renesas RZ/A2M, ARM Cortex-A9) ([README](custom/README.md))
 * NUCLEO-F767ZI (STM32F767ZI) ([README](custom/README.md))
+* NUCLEO-F446RE (STM32F446RE) + Ethernet Shield 2 (W5500) ([README](custom/README.md))
 * mbed LPC1768 ([README](custom/README.md))
 
 ## limitations 
