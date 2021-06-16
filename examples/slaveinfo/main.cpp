@@ -594,18 +594,18 @@ void slaveinfo(char *ifname)
                 if(printMAP)
             {
                     if (ec_slave[cnt].mbx_proto & ECT_MBXPROT_COE){
-                        printf("[DATA1]\n");
+                        //printf("[DATA1]\n");
                         si_map_sdo(cnt);
-                        printf("[DATA1]\n");
+                        //printf("[DATA1]\n");
                     }
                     else{
-                        printf("[DATA2]\n");
+                        //printf("[DATA2]\n");
                         si_map_sii(cnt);
-                        printf("[DATA2]\n");
+                        //printf("[DATA2]\n");
                     }
             }else{
-				printf("NO DATA\n");
-			}
+                printf("NO DATA\n");
+            }
          }
       }
       else
